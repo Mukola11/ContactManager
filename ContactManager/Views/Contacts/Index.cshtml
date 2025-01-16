@@ -1,0 +1,68 @@
+﻿@{
+    ViewData["Title"] = "Contacts";
+}
+
+<h1>Contacts List</h1>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+}
+
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+
+<div class="mb-3">
+    <label for="filterInput" class="form-label">Filter Contacts:</label>
+    <input type="text" id="filterInput" class="form-control" placeholder="Enter name, phone, etc." />
+</div>
+
+<table class="table" id="contactsTable">
+    <thead>
+        <tr>
+            <th data-column="Id" style="display:none;">Id</th>
+            <th data-column="name" class="sortable">Name</th>
+            <th data-column="dob" class="sortable">Date of Birth</th>
+            <th data-column="married" class="sortable">Married</th>
+            <th data-column="phone" class="sortable">Phone</th>
+            <th data-column="salary" class="sortable">Salary</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var contact in Model)
+        {
+            <tr class="contactRow">
+                <td style="display:none;">@contact.Id</td>
+                <td>@contact.Name</td>
+                <td>@contact.DateOfBirth.ToShortDateString()</td>
+                <td>
+                    <input type="checkbox" class="editable-checkbox" @(contact.Married ? "checked" : "") />
+                </td>
+                <td>@contact.Phone</td>
+                <td>@contact.Salary</td>
+                <td>
+                    <form asp-action="DeleteContact" asp-route-id="@contact.Id" method="post">
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>
+
+<a href="@Url.Action("Upload", "Upload")" class="btn btn-primary">Upload CSV</a>
+
+<form asp-action="SaveChanges" method="post" style="display: none;" id="saveChangesForm">
+    <button type="submit" class="btn btn-success">Save Changes</button>
+</form>
+
+
+<script src="~/js/filter.js"></script>
+<script src="~/js/sort.js"></script>
+<script src="~/js/table-editing.js"></script>
+<script src="~/js/save-changes.js"></script>
+
