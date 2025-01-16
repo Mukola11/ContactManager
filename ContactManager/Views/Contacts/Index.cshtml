@@ -2,25 +2,25 @@
     ViewData["Title"] = "Contacts";
 }
 
-<h1>Contacts List</h1>
+<h1 class="text-center my-4">Contacts List</h1>
 
 @if (TempData["SuccessMessage"] != null)
 {
-    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
+    <div class="alert alert-success text-center">@TempData["SuccessMessage"]</div>
 }
 
 @if (TempData["ErrorMessage"] != null)
 {
-    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+    <div class="alert alert-danger text-center">@TempData["ErrorMessage"]</div>
 }
 
-<div class="mb-3">
+<div class="mb-4">
     <label for="filterInput" class="form-label">Filter Contacts:</label>
     <input type="text" id="filterInput" class="form-control" placeholder="Enter name, phone, etc." />
 </div>
 
-<table class="table" id="contactsTable">
-    <thead>
+<table class="table table-striped" id="contactsTable">
+    <thead class="thead-light">
         <tr>
             <th data-column="Id" style="display:none;">Id</th>
             <th data-column="name" class="sortable">Name</th>
@@ -45,19 +45,24 @@
                 <td>@contact.Salary</td>
                 <td>
                     <form asp-action="DeleteContact" asp-route-id="@contact.Id" method="post">
-                        <button type="submit" class="btn btn-danger">Delete</button>
+                        <button type="submit" class="btn btn-danger btn-sm">Delete</button>
                     </form>
                 </td>
             </tr>
         }
     </tbody>
-
 </table>
 
-<a href="@Url.Action("Upload", "Upload")" class="btn btn-primary">Upload CSV</a>
+<div class="text-center mt-4">
+    <a href="@Url.Action("Upload", "Upload")" class="btn btn-primary btn-lg">
+        Upload CSV
+    </a>
+</div>
 
 <form asp-action="SaveChanges" method="post" style="display: none;" id="saveChangesForm">
-    <button type="submit" class="btn btn-success">Save Changes</button>
+    <div class="text-center mt-4">
+        <button type="submit" class="btn btn-success btn-lg">Save Changes</button>
+    </div>
 </form>
 
 
@@ -65,4 +70,3 @@
 <script src="~/js/sort.js"></script>
 <script src="~/js/table-editing.js"></script>
 <script src="~/js/save-changes.js"></script>
-

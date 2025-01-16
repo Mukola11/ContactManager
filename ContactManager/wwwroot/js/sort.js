@@ -11,7 +11,7 @@
             const columnType = column.dataset.column;
 
             if (sortDirections[columnIndex] === undefined) {
-                sortDirections[columnIndex] = true; 
+                sortDirections[columnIndex] = true;
             }
 
             const isAscending = sortDirections[columnIndex];
@@ -22,18 +22,27 @@
 
                 let comparison = 0;
 
-                if (columnType === 'dob') {
-                    const dateA = new Date(cellA.textContent.trim());
-                    const dateB = new Date(cellB.textContent.trim());
-                    comparison = dateA - dateB; 
-                } else if (columnType === 'married') {
-                    const boolA = cellA.querySelector('input[type="checkbox"]').checked;
-                    const boolB = cellB.querySelector('input[type="checkbox"]').checked;
-                    comparison = Number(boolA) - Number(boolB);
-                } else if (!isNaN(cellA.textContent.trim()) && !isNaN(cellB.textContent.trim())) {
-                    comparison = parseFloat(cellA.textContent.trim()) - parseFloat(cellB.textContent.trim());
-                } else {
-                    comparison = cellA.textContent.trim().localeCompare(cellB.textContent.trim());
+                try {
+                    if (columnType === 'dob') {
+                        const dateA = new Date(cellA.textContent.trim());
+                        const dateB = new Date(cellB.textContent.trim());
+
+                        if (isNaN(dateA) || isNaN(dateB)) {
+                            throw new Error('Invalid date format');
+                        }
+                        comparison = dateA - dateB;
+                    } else if (columnType === 'married') {
+                        const boolA = cellA.querySelector('input[type="checkbox"]').checked;
+                        const boolB = cellB.querySelector('input[type="checkbox"]').checked;
+                        comparison = Number(boolA) - Number(boolB);
+                    } else if (!isNaN(cellA.textContent.trim()) && !isNaN(cellB.textContent.trim())) {
+                        comparison = parseFloat(cellA.textContent.trim()) - parseFloat(cellB.textContent.trim());
+                    } else {
+                        comparison = cellA.textContent.trim().localeCompare(cellB.textContent.trim());
+                    }
+                } catch (error) {
+                    console.error('Error during comparison:', error.message);
+                    comparison = 0; 
                 }
 
                 return isAscending ? comparison : -comparison;
